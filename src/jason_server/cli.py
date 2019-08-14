@@ -12,7 +12,7 @@ CONTEXT_SETTINGS = dict(help_option_names=['--help'])
     "-p","--port", default=8080, help="Port"
 )
 @click.version_option(
-    version='0.1.0'
+    version='0.2.0'
 )
 @click.pass_context
 def cli(ctx, host, port):
