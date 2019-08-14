@@ -10,3 +10,4 @@ jason-server = {editable = true,path = "."}
 [packages]
 click = "*"
 bottle = "*"
+tinydb = "*"
