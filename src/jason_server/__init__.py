@@ -9,6 +9,3 @@ __author__ = "Jerome Pradier"
 __author_email__ = "germione.grangere@gmail.com"
 
 __license__ = "MIT"
-
-def main():
-    print("Using jason-server")
