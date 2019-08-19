@@ -5,7 +5,7 @@ name = "pypi"
 
 [dev-packages]
 pytest = "*"
-jason-server = {editable = true,path = "."}
+pytest-describe = "*"
 
 [packages]
 click = "*"

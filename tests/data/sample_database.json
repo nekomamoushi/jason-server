@@ -1,0 +1,10 @@
+{
+    "articles": [
+        {"id": 1, "title": "First Title", "authorId": 2},
+        {"id": 2, "title": "Second Title", "authorId": 1}
+    ],
+    "authors": [
+        {"id": 1, "name": "Author 1"},
+        {"id": 2, "name": "Author 2"}
+    ]
+}

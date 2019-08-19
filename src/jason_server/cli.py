@@ -20,8 +20,8 @@ def cli(ctx, host, port):
     ctx.obj["host"] = host
     ctx.obj["port"] = port
 
-
-@cli.command(help="Run Bottle World")
+@cli.command(help="Run your database as REST Api")
+@click.argument('database')
 @click.pass_context
-def serve(ctx):
-    run(ctx.obj)
+def watch(ctx, database):
+    run(ctx.obj, database=database)
