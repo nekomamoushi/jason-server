@@ -6,20 +6,28 @@ from jason_server.database import get_table, generate_endpoints, get_tiny_table_
 
 INDEX_TEMPLATE="""
 <html>
-    <head><title>Jason Server</title></head>
+    <head>
+        <title>Jason Server</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    </head>
     <body>
-        <h1>Resources</h1>
-        <ul>
-        % for table in tables:
-            <li>
-                <a href="{{base_url}}/{{table}}">{{table}}</a>
-            </li>
-        % end
-        </ul>
-        <h1>HTTP Method:</h1>
-        <ul>
-            <li>GET</li>
-        </ul>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+            <h1>Jason Server</h1>
+            </div>
+        </div>
+        <div class="container">
+            <h2>Resources</h2>
+            <ul>
+                % for table in tables:
+                <li>
+                    <a href="{{base_url}}/{{table}}">{{table}}</a>
+                </li>
+                % end
+            </ul>
+            <h2>HTTP Method supported:</h2>
+            <p><span class="badge badge-secondary">GET</span></p>
+        </div>
     </body>
 </html>
 """
