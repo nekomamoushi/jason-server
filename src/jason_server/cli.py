@@ -1,3 +1,6 @@
+
+import webbrowser
+
 import click
 
 from jason_server.derulo import run
@@ -22,6 +25,11 @@ def cli(ctx, host, port):
 
 @cli.command(help="Run your database as REST Api")
 @click.argument('database')
+@click.option(
+    "-o", "--open", is_flag=True
+)
 @click.pass_context
-def watch(ctx, database):
+def watch(ctx, database, open):
+    if open:
+        webbrowser.open("http://{}:{}".format(ctx.obj["host"], ctx.obj["port"]))
     run(ctx.obj, database=database)
