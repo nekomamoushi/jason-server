@@ -22,6 +22,9 @@ def get_tables(database):
 def get_table(name):
     return db.table(name)
 
+def get_tiny_table_names():
+    return [ table for table in db.tables() if table != "_default" ]
+
 def generate_endpoints(database_path):
     database = open_database(database_path)
     tables_names = get_tables(database)
