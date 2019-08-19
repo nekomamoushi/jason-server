@@ -12,7 +12,7 @@ INDEX_TEMPLATE="""
         <ul>
         % for table in tables:
             <li>
-                <a href="http://localhost:3000/{{table}}">{{table}}</a>
+                <a href="{{base_url}}/{{table}}">{{table}}</a>
             </li>
         % end
         </ul>
@@ -32,8 +32,15 @@ app = Bottle()
 
 @app.route('/')
 def bottle_world():
+
+    def build_url(host, port):
+        return "http://{}:{}".format(host, port)
+
+    host = app.config.get('host')
+    port = app.config.get('port')
     tables = get_tiny_table_names()
     resources = {
+        "base_url": build_url(host, port),
         "tables": tables
     }
     return template(INDEX_TEMPLATE, resources)
@@ -49,5 +56,7 @@ def get(endpoint):
 def run(options, database):
     host = options['host']
     port = options['port']
+    app.config.setdefault('host', host)
+    app.config.setdefault('port', port)
     generate_endpoints(database)
     app.run(host=host, port=port)
