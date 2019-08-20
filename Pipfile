@@ -12,3 +12,4 @@ jason-server = {editable = true,path = "."}
 click = "*"
 bottle = "*"
 tinydb = "*"
+pytest-cov = "*"
