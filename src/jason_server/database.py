@@ -31,4 +31,4 @@ def generate_endpoints(database_path):
     for name in tables_names:
         table = create_table(name)
         populate_table(table, database[name])
-
+    return tables_names

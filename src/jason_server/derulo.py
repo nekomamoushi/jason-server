@@ -61,10 +61,26 @@ def get(endpoint):
 
 # ---------------------------------------------------------------------------- #
 
+def print_message(database, tables, host, port):
+    BOLD_BLUE = '\033[1;34m'
+    RESET = '\033[0m'
+
+    print("\n    {}Database{}".format(BOLD_BLUE, RESET))
+    print("    {}".format(database))
+
+    print("\n    {}Resources{}".format(BOLD_BLUE, RESET))
+    base_url = "http://{}:{}".format(host, port)
+    for table in tables:
+        print("    {}/{}".format(base_url, table))
+
+    print("\n    {}Home{}".format(BOLD_BLUE, RESET))
+    print("    {}/".format(base_url))
+
 def run(options, database):
     host = options['host']
     port = options['port']
     app.config.setdefault('host', host)
     app.config.setdefault('port', port)
-    generate_endpoints(database)
-    app.run(host=host, port=port)
+    table_names = generate_endpoints(database)
+    print_message(database, table_names, host, port)
+    app.run(host=host, port=port, quiet=True)
