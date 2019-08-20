@@ -9,6 +9,7 @@ pytest-describe = "*"
 jason-server = {editable = true,path = "."}
 flake8 = "*"
 pytest-cov = "*"
+requests = "*"
 
 [packages]
 click = "*"
