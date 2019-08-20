@@ -7,6 +7,7 @@ name = "pypi"
 pytest = "*"
 pytest-describe = "*"
 jason-server = {editable = true,path = "."}
+flake8 = "*"
 
 [packages]
 click = "*"
