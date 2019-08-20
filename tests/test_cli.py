@@ -1,12 +1,11 @@
-import pytest
 
 from click.testing import CliRunner
 
 from jason_server.cli import cli
-from jason_server.utils import open_database
 
-NON_EXISTING_FILE="tests/data/non_existing_file"
-BAD_FORMATTED_FILE="tests/data/bad_formatted_database.json"
+NON_EXISTING_FILE = "tests/data/non_existing_file"
+BAD_FORMATTED_FILE = "tests/data/bad_formatted_database.json"
+
 
 def describe_cli():
 
@@ -14,6 +13,7 @@ def describe_cli():
         runner = CliRunner()
         result = runner.invoke(cli)
         assert 0 == result.exit_code
+
 
 def describe_cli_watch():
 
@@ -28,4 +28,3 @@ def describe_cli_watch():
         result = runner.invoke(cli, ['watch', BAD_FORMATTED_FILE])
         assert 2 == result.exit_code
         assert BAD_FORMATTED_FILE in result.output
-

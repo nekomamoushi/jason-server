@@ -1,10 +1,9 @@
-from bottle import Bottle, run
-from bottle import template
+from bottle import Bottle, template
 from jason_server.database import get_table, generate_endpoints, get_tiny_table_names
 
 # ---------------------------------------------------------------------------- #
 
-INDEX_TEMPLATE="""
+INDEX_TEMPLATE = """
 <html>
     <head>
         <title>Jason Server</title>
@@ -38,6 +37,7 @@ app = Bottle()
 
 # ---------------------------------------------------------------------------- #
 
+
 @app.route('/')
 def bottle_world():
 
@@ -53,6 +53,7 @@ def bottle_world():
     }
     return template(INDEX_TEMPLATE, resources)
 
+
 @app.route('/<endpoint>', method='GET')
 def get(endpoint):
     table = get_table(endpoint)
@@ -60,6 +61,7 @@ def get(endpoint):
     return dict(data=data)
 
 # ---------------------------------------------------------------------------- #
+
 
 def print_message(database, tables, host, port):
     BOLD_BLUE = '\033[1;34m'
@@ -75,6 +77,7 @@ def print_message(database, tables, host, port):
 
     print("\n    {}Home{}".format(BOLD_BLUE, RESET))
     print("    {}/".format(base_url))
+
 
 def run(options, database):
     host = options['host']

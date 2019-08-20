@@ -13,11 +13,13 @@ ABOUT = {}
 with io.open(os.path.join(HERE, 'src/jason_server', '__init__.py')) as f:
     exec(f.read(), ABOUT)
 
+
 # Get the long description from the README file
 def get_long_description():
     with io.open(os.path.join(HERE, 'README.md'), encoding='utf-8') as f:
         long_description = f.read()
     return long_description
+
 
 PACKAGE_NAME = ABOUT['__title__']
 VERSION = ABOUT['__version__']
