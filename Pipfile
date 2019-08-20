@@ -8,9 +8,9 @@ pytest = "*"
 pytest-describe = "*"
 jason-server = {editable = true,path = "."}
 flake8 = "*"
+pytest-cov = "*"
 
 [packages]
 click = "*"
 bottle = "*"
 tinydb = "*"
-pytest-cov = "*"
