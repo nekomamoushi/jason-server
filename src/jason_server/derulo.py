@@ -1,5 +1,6 @@
-from bottle import Bottle, template
+from bottle import Bottle, template, request
 from jason_server.database import get_table, generate_endpoints, get_tiny_table_names
+from jason_server.utils import chunk_list
 
 # ---------------------------------------------------------------------------- #
 
@@ -35,8 +36,19 @@ INDEX_TEMPLATE = """
 
 app = Bottle()
 
-# ---------------------------------------------------------------------------- #
+# -------------------------------------------------------------------------- #
 
+def verify_query_paginate(query):
+    page, limit = (None, 10)
+    if query and '_page' in query:
+        page = int(query['_page'])
+        if '_limit' in query:
+            limit = int(query['_limit'])
+            limit = limit if limit < 10 else 10
+
+    return page, limit
+
+# --------------------------------------------------------------------------- #
 
 @app.route('/')
 def bottle_world():
@@ -57,8 +69,14 @@ def bottle_world():
 @app.route('/<endpoint>', method='GET')
 def get(endpoint):
     table = get_table(endpoint)
-    data = table.all()
-    return dict(data=data)
+    data = dict(data=table.all())
+    data = data['data']
+
+    page, limit = verify_query_paginate(request.query)
+    chunk_data = list(chunk_list(data, limit))
+    results = chunk_data[page-1] if page else data
+
+    return dict(data=results)
 
 # ---------------------------------------------------------------------------- #
 
@@ -86,4 +104,4 @@ def run(options, database):
     app.config.setdefault('port', port)
     table_names = generate_endpoints(database)
     print_message(database, table_names, host, port)
-    app.run(host=host, port=port, quiet=True)
+    app.run(host=host, port=port, quiet=True, reloader=True)
