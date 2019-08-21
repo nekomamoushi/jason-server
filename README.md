@@ -57,7 +57,18 @@ Now if you go to [http://localhost:8080/articles](http://localhost:8080/articles
 ### Singular routes
 
 ```
-GET    /profile
+GET /authors
+```
+
+### Pagination
+
+Use `_page` and `_limit` to paginate returned data.
+
+In the Link header you'll get first, prev, next and last links.
+
+```
+GET /articles?_page=2
+GET /articles?_page=3&_limit=15
 ```
 
 ### Alternative host (default: localhost)
@@ -65,7 +76,7 @@ GET    /profile
 You can start JSON Server on other host with the `--host` flag:
 
 ```bash
-$ json-server --watch db.json --host "0.0.0.0"
+$ json-server --host "0.0.0.0" watch db.json
 ```
 
 ### Alternative port (default: 8080)
@@ -73,7 +84,7 @@ $ json-server --watch db.json --host "0.0.0.0"
 You can start JSON Server on other ports with the `--port` flag:
 
 ```bash
-$ json-server --watch db.json --port 8100
+$ json-server --port 8100 watch db.json 
 ```
 
 
