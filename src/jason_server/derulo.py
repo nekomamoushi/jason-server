@@ -1,8 +1,12 @@
 from bottle import Bottle, template, request, response
-from jason_server.database import get_table, generate_endpoints, get_tiny_table_names
+from jason_server.database import (
+    get_table,
+    generate_endpoints,
+    get_tiny_table_names
+)
 from jason_server.utils import chunk_list
 
-# ---------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------- #
 
 INDEX_TEMPLATE = """
 <html>
@@ -32,11 +36,12 @@ INDEX_TEMPLATE = """
 </html>
 """
 
-# ---------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------- #
 
 app = Bottle()
 
-# -------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------- #
+
 
 def verify_query_paginate(query):
     page, limit = (None, 10)
@@ -47,19 +52,6 @@ def verify_query_paginate(query):
             limit = limit if limit < 10 else 10
 
     return page, limit
-
-# <http://localhost:3000/persons?_page=1&_limit=3>; rel="first",
-# <http://localhost:3000/persons?_page=2&_limit=3>; rel="next",
-# <http://localhost:3000/persons?_page=5&_limit=3>; rel="last"
-
-# <http://localhost:3000/persons?_page=1&_limit=3>; rel="first",
-# <http://localhost:3000/persons?_page=1&_limit=3>; rel="prev",
-# <http://localhost:3000/persons?_page=3&_limit=3>; rel="next",
-# <http://localhost:3000/persons?_page=5&_limit=3>; rel="last"
-
-# <http://localhost:3000/persons?_page=1&_limit=3>; rel="first",
-# <http://localhost:3000/persons?_page=4&_limit=3>; rel="prev",
-# <http://localhost:3000/persons?_page=5&_limit=3>; rel="last"
 
 
 def build_link_header(request, page, total):
@@ -136,7 +128,7 @@ def get(endpoint):
 
     return dict(data=results)
 
-# ---------------------------------------------------------------------------- #
+# --------------------------------------------------------------------------- #
 
 
 def print_message(database, tables, host, port):

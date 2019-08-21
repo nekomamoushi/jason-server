@@ -17,7 +17,7 @@ def populate_table(table, data):
 
 
 def get_tables(database):
-    return [ name for name in database ]
+    return [name for name in database]
 
 
 def get_table(name):
@@ -25,7 +25,7 @@ def get_table(name):
 
 
 def get_tiny_table_names():
-    return [ table for table in db.tables() if table != "_default" ]
+    return [table for table in db.tables() if table != "_default"]
 
 
 def generate_endpoints(database_path):

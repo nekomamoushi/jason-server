@@ -1,9 +1,7 @@
-import threading
 import pytest
 
 import requests
 import time
-from jason_server.derulo import run
 
 
 def describe_endpoint():
