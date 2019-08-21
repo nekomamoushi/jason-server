@@ -1,4 +1,5 @@
 
+from itertools import islice
 import json
 
 
@@ -12,3 +13,8 @@ def open_database(path):
     except json.JSONDecodeError:
         print("< {0} > is not well formated.".format(path))
         exit(2)
+
+
+def chunk_list(data, chunk_size=1):
+    it = iter(data)
+    return iter(lambda: tuple(islice(it, chunk_size)), ())
