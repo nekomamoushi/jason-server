@@ -42,6 +42,13 @@ app = Bottle()
 
 # --------------------------------------------------------------------------- #
 
+def verify_query_sort(query):
+    sort, order = (None, "asc")
+    if query and '_sort' in query:
+        sort = query['_sort']
+        if '_order' in query:
+            order = query['_order']
+    return sort, order
 
 def verify_query_paginate(query):
     page, limit = (None, 10)
@@ -117,6 +124,9 @@ def get(endpoint):
     data = dict(data=table.all())
     data = data['data']
 
+    if not request.query:
+        return dict(data=data)
+        
     results = data
 
     page, limit = verify_query_paginate(request.query)
@@ -125,6 +135,13 @@ def get(endpoint):
         results = chunk_data[page-1]
         link_header = build_link_header(request, page, len(chunk_data))
         response.set_header("Link", link_header)
+
+    sort, order = verify_query_sort(request.query)
+    if sort:
+        if order == 'asc':
+            results = sorted(results, key = lambda i: i[sort])
+        else:
+            results = sorted(results, key = lambda i: i[sort], reverse=True)
 
     return dict(data=results)
 
