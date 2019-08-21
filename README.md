@@ -66,13 +66,23 @@ GET /authors
 
 ### Pagination
 
-Use `_page` and `_limit` to paginate returned data.
+Use `_page` and `_limit` to paginate data.
 
-In the Link header you'll get first, prev, next and last links.
+In the `Link` header you'll get `first`, `prev`, `next` and `last` links.
 
 ```
 GET /articles?_page=2
 GET /articles?_page=3&_limit=15
+```
+
+### Sorting
+
+Use `_sort` and `_order` (defaults order: asccendant)
+
+```
+GET /persons?_sort=age
+GET /persons?_sort=name&_order=desc
+
 ```
 
 ### Alternative host (default: localhost)
