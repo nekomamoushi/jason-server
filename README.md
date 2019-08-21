@@ -1,4 +1,4 @@
-# Jason Server 
+# Jason Server
 
 ![PyPI](https://img.shields.io/pypi/v/jason-server)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/jason-server)
@@ -11,9 +11,13 @@ Get a full fake REST API
 
 <!-- toc -->
 
-- [Getting started](#getting-started)
-  - [Singular routes](#singular-routes)
-  - [Alternative port](#alternative-port)
+* [Jason Server](#jason-server)
+  * [Getting started](#getting-started)
+  * [Routes](#routes)
+     * [Singular routes](#singular-routes)
+     * [Pagination](#pagination)
+     * [Alternative host (default: localhost)](#alternative-host-default-localhost)
+     * [Alternative port (default: 8080)](#alternative-port-default-8080)
 
 <!-- tocstop -->
 
@@ -84,7 +88,7 @@ $ json-server --host "0.0.0.0" watch db.json
 You can start JSON Server on other ports with the `--port` flag:
 
 ```bash
-$ json-server --port 8100 watch db.json 
+$ json-server --port 8100 watch db.json
 ```
 
 
