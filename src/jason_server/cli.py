@@ -15,14 +15,18 @@ CONTEXT_SETTINGS = dict(help_option_names=['--help'])
 @click.option(
     "-p", "--port", default=8080, help="Port"
 )
+@click.option(
+    "-q", "--quiet", is_flag=True
+)
 @click.version_option(
     version='0.3.0'
 )
 @click.pass_context
-def cli(ctx, host, port):
+def cli(ctx, host, port, quiet):
     ctx.obj = {}
     ctx.obj["host"] = host
     ctx.obj["port"] = port
+    ctx.obj["quiet"] = quiet
 
 
 @cli.command(help="Run your database as REST Api")

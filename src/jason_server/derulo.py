@@ -158,8 +158,11 @@ def print_message(database, tables, host, port):
 def run(options, database):
     host = options['host']
     port = options['port']
+    quiet = options['quiet']
+
     app.config.setdefault('host', host)
     app.config.setdefault('port', port)
     table_names = generate_endpoints(database)
-    print_message(database, table_names, host, port)
+    if not quiet:
+        print_message(database, table_names, host, port)
     app.run(host=host, port=port, quiet=True, reloader=True)
