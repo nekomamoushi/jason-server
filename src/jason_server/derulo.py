@@ -1,4 +1,4 @@
-from bottle import Bottle, template, request
+from bottle import Bottle, template, request, response
 from jason_server.database import get_table, generate_endpoints, get_tiny_table_names
 from jason_server.utils import chunk_list
 
@@ -48,6 +48,58 @@ def verify_query_paginate(query):
 
     return page, limit
 
+# <http://localhost:3000/persons?_page=1&_limit=3>; rel="first",
+# <http://localhost:3000/persons?_page=2&_limit=3>; rel="next",
+# <http://localhost:3000/persons?_page=5&_limit=3>; rel="last"
+
+# <http://localhost:3000/persons?_page=1&_limit=3>; rel="first",
+# <http://localhost:3000/persons?_page=1&_limit=3>; rel="prev",
+# <http://localhost:3000/persons?_page=3&_limit=3>; rel="next",
+# <http://localhost:3000/persons?_page=5&_limit=3>; rel="last"
+
+# <http://localhost:3000/persons?_page=1&_limit=3>; rel="first",
+# <http://localhost:3000/persons?_page=4&_limit=3>; rel="prev",
+# <http://localhost:3000/persons?_page=5&_limit=3>; rel="last"
+
+
+def build_link_header(request, page, total):
+
+    REL_FIRST = '<{url}?_page={first}>; rel="first"'
+    REL_PREV = '<{url}?_page={prev}>; rel="prev"'
+    REL_NEXT = '<{url}?_page={next}>; rel="next"'
+    REL_LAST = '<{url}?_page={last}>; rel="last"'
+
+    scheme, netloc, path = request.urlparts[0:3]
+    url = "{scheme}://{netloc}{path}".format(scheme=scheme, netloc=netloc, path=path)
+    links = None
+
+    if total == 1:
+        return ""
+
+    if page == 1:
+        links = [
+            REL_FIRST.format(url=url, first=1),
+            REL_NEXT.format(url=url, next=2),
+            REL_LAST.format(url=url, last=total)
+        ]
+    elif page == total:
+        links = [
+            REL_FIRST.format(url=url, first=1),
+            REL_PREV.format(url=url, prev=total-1),
+            REL_LAST.format(url=url, last=total)
+        ]
+        return ",".join(links)
+    else:
+        links = [
+            REL_FIRST.format(url=url, first=1),
+            REL_PREV.format(url=url, prev=page-1),
+            REL_NEXT.format(url=url, next=page+1),
+            REL_LAST.format(url=url, last=total)
+        ]
+
+    return ",".join(links)
+
+
 # --------------------------------------------------------------------------- #
 
 @app.route('/')
@@ -68,13 +120,19 @@ def bottle_world():
 
 @app.route('/<endpoint>', method='GET')
 def get(endpoint):
+
     table = get_table(endpoint)
     data = dict(data=table.all())
     data = data['data']
 
+    results = data
+
     page, limit = verify_query_paginate(request.query)
-    chunk_data = list(chunk_list(data, limit))
-    results = chunk_data[page-1] if page else data
+    if page:
+        chunk_data = list(chunk_list(data, limit))
+        results = chunk_data[page-1]
+        link_header = build_link_header(request, page, len(chunk_data))
+        response.set_header("Link", link_header)
 
     return dict(data=results)
 
