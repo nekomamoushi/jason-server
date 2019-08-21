@@ -126,15 +126,8 @@ def get(endpoint):
 
     if not request.query:
         return dict(data=data)
-        
-    results = data
 
-    page, limit = verify_query_paginate(request.query)
-    if page:
-        chunk_data = list(chunk_list(data, limit))
-        results = chunk_data[page-1]
-        link_header = build_link_header(request, page, len(chunk_data))
-        response.set_header("Link", link_header)
+    results = data
 
     sort, order = verify_query_sort(request.query)
     if sort:
@@ -142,6 +135,13 @@ def get(endpoint):
             results = sorted(results, key = lambda i: i[sort])
         else:
             results = sorted(results, key = lambda i: i[sort], reverse=True)
+
+    page, limit = verify_query_paginate(request.query)
+    if page:
+        chunk_data = list(chunk_list(data, limit))
+        results = chunk_data[page-1]
+        link_header = build_link_header(request, page, len(chunk_data))
+        response.set_header("Link", link_header)
 
     return dict(data=results)
 
