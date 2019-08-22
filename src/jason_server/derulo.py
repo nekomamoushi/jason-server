@@ -111,11 +111,23 @@ def db():
     return db.json
 
 
+@app.route('/<endpoint>/<index>', method='GET')
+def get(endpoint, index):
+    table = db.resource(endpoint)
+    elements = table.all()
+    index = int(index) - 1
+
+    if index >= len(elements):
+        return {}
+
+    return elements[index]
+
+
 @app.route('/<endpoint>', method='GET')
 def get(endpoint):
     table = db.resource(endpoint)
     elements = table.all()
-
+    print(type(elements))
     if not request.query:
         return dict(data=elements)
 
