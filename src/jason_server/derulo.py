@@ -17,6 +17,9 @@ db = None
 
 # --------------------------------------------------------------------------- #
 
+def verify_query_filter(query):
+    return [q for q in query if not q.startswith('_')]
+
 
 def verify_query_sort(query):
     sort, order = (None, "asc")
@@ -112,6 +115,15 @@ def get(endpoint):
         return dict(data=elements)
 
     results = elements
+
+    user_args = verify_query_filter(request.query)
+    if user_args:
+        for arg in user_args:
+            results = [
+                r
+                for r in results
+                if arg in r.keys() and request.query[arg] == str(r[arg])
+            ]
 
     sort, order = verify_query_sort(request.query)
     if sort:
