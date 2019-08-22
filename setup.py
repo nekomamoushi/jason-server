@@ -30,7 +30,11 @@ AUTHOR_EMAIL = ABOUT['__author_email__']
 LICENSE = ABOUT['__license__']
 PACKAGES = find_packages(where='src', exclude=['contrib', 'docs', 'tests'])
 PACKAGE_DIR = {"": "src"}
-INSTALL_REQUIRES = []
+INSTALL_REQUIRES = [
+    "click",
+    "bottle",
+    "tinydb"
+]
 EXTRA_REQUIRES = []
 
 ###############################################################################
