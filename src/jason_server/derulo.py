@@ -101,6 +101,10 @@ def build_link_header(request, page, total):
 
 # --------------------------------------------------------------------------- #
 
+@app.hook('after_request')
+def set_default_headers():
+    response.set_header("X-Powerded-By", "Bottle")
+
 @app.route('/')
 def bottle_world():
 
@@ -119,7 +123,6 @@ def bottle_world():
 
 @app.route('/<endpoint>', method='GET')
 def get(endpoint):
-
     table = get_table(endpoint)
     data = dict(data=table.all())
     data = data['data']
