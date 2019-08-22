@@ -27,6 +27,27 @@ def describe_endpoint():
         data = r.json()
         assert 13 == len(data['data'])
 
+    def get_with_filter(s):
+        persons_url_filter_age30 = "http://127.0.0.1:8100/persons?age=30"
+        persons_url_filter_age30_male = "http://127.0.0.1:8100/persons?age=30&gender=male"
+        persons_url_filter_age30_female = "http://127.0.0.1:8100/persons?age=30&gender=female"
+
+
+        r = s.get(persons_url_filter_age30)
+        assert 200 == r.status_code
+        data = r.json()
+        assert 3 == len(data['data'])
+
+        r = s.get(persons_url_filter_age30_male)
+        assert 200 == r.status_code
+        data = r.json()
+        assert 2 == len(data['data'])
+
+        r = s.get(persons_url_filter_age30_female)
+        assert 200 == r.status_code
+        data = r.json()
+        assert 1 == len(data['data'])
+
     def get_with_paginate(s):
         persons_url_page1 = "http://127.0.0.1:8100/persons?_page=1"
         persons_url_page2 = "http://127.0.0.1:8100/persons?_page=2"
