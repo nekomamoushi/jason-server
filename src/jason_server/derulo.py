@@ -17,6 +17,7 @@ db = None
 
 # --------------------------------------------------------------------------- #
 
+
 def verify_query_filter(query):
     return [q for q in query if not q.startswith('_')]
 
@@ -49,7 +50,11 @@ def build_link_header(request, page, total):
     REL_LAST = '<{url}?_page={last}>; rel="last"'
 
     scheme, netloc, path = request.urlparts[0:3]
-    url = "{scheme}://{netloc}{path}".format(scheme=scheme, netloc=netloc, path=path)
+    url = "{scheme}://{netloc}{path}".format(
+        scheme=scheme,
+        netloc=netloc,
+        path=path
+    )
     links = None
 
     if total == 1:
