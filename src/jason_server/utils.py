@@ -2,6 +2,15 @@
 from itertools import islice
 import json
 
+try:
+    FileNotFoundError
+except:
+    FileNotFoundError = IOError
+
+try:
+    from json.decoder import JSONDecodeError
+except ImportError:
+    JSONDecodeError = ValueError
 
 def open_database(path):
     try:
@@ -10,7 +19,7 @@ def open_database(path):
     except FileNotFoundError:
         print("< {0} > does not exists.".format(path))
         exit(1)
-    except json.JSONDecodeError:
+    except JSONDecodeError:
         print("< {0} > is not well formated.".format(path))
         exit(2)
 

@@ -21,10 +21,13 @@ def describe_cli_watch():
         runner = CliRunner()
         result = runner.invoke(cli, ['watch', NON_EXISTING_FILE])
         assert 1 == result.exit_code
+        print(result.output)
         assert NON_EXISTING_FILE in result.output
 
     def with_bad_formated_json():
         runner = CliRunner()
         result = runner.invoke(cli, ['watch', BAD_FORMATTED_FILE])
         assert 2 == result.exit_code
+        print(result.output)
+
         assert BAD_FORMATTED_FILE in result.output
