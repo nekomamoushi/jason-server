@@ -4,7 +4,6 @@ from bottle import Bottle, template, request, response
 from jason_server.database import Database
 from jason_server.utils import chunk_list
 
-
 # --------------------------------------------------------------------------- #
 
 # Define base directory
@@ -18,6 +17,7 @@ db = None
 
 # --------------------------------------------------------------------------- #
 
+
 def verify_query_sort(query):
     sort, order = (None, "asc")
     if query and '_sort' in query:
@@ -25,6 +25,7 @@ def verify_query_sort(query):
         if '_order' in query:
             order = query['_order']
     return sort, order
+
 
 def verify_query_paginate(query):
     page, limit = (None, 10)
@@ -81,6 +82,7 @@ def build_link_header(request, page, total):
 def set_default_headers():
     response.set_header("X-Powerded-By", "Bottle")
 
+
 @app.route('/')
 def bottle_world():
 
@@ -114,9 +116,9 @@ def get(endpoint):
     sort, order = verify_query_sort(request.query)
     if sort:
         if order == 'asc':
-            results = sorted(results, key = lambda i: i[sort])
+            results = sorted(results, key=lambda i: i[sort])
         else:
-            results = sorted(results, key = lambda i: i[sort], reverse=True)
+            results = sorted(results, key=lambda i: i[sort], reverse=True)
 
     page, limit = verify_query_paginate(request.query)
     if page:

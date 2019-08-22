@@ -1,10 +1,10 @@
 
-import pytest
 from jason_server.database import Database
 
 NON_EXISTING_FILE = "tests/data/non_existing_file"
 BAD_FORMATTED_FILE = "tests/data/bad_formatted_database.json"
 JSON_DATABASE = "tests/data/sample_database.json"
+
 
 def describe_database():
 
@@ -18,4 +18,3 @@ def describe_database():
 
         assert 2 == len(db.resource('articles'))
         assert 3 == len(db.resource('authors'))
-

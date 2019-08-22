@@ -80,7 +80,7 @@ def describe_endpoint():
         r = s.get(persons_url_sort_by_age)
         assert 200 == r.status_code
         data = r.json()
-        assert 21 ==data['data'][0]['age']
+        assert 21 == data['data'][0]['age']
         assert "Bell Hinton" == data['data'][0]['name']
 
         r = s.get(persons_url_sort_by_name)
@@ -98,19 +98,19 @@ def describe_endpoint():
         r = s.get(persons_url_sort_age_paginate)
         assert 200 == r.status_code
         data = r.json()
-        assert 23 ==data['data'][1]['age']
+        assert 23 == data['data'][1]['age']
 
         r = s.get(persons_url_sort_name_paginate)
         assert 200 == r.status_code
         data = r.json()
-        assert 36 ==data['data'][1]['age']
+        assert 36 == data['data'][1]['age']
 
         r = s.get(persons_url_sort_desc_age_paginate)
         assert 200 == r.status_code
         data = r.json()
-        assert 37 ==data['data'][1]['age']
+        assert 37 == data['data'][1]['age']
 
         r = s.get(persons_url_sort_name_paginate_with_limit)
         assert 200 == r.status_code
         data = r.json()
-        assert 23 ==data['data'][0]['age']
+        assert 23 == data['data'][0]['age']

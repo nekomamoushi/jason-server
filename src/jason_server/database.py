@@ -6,6 +6,7 @@ from jason_server.utils import open_database
 
 # --------------------------------------------------------------------------- #
 
+
 def tinydb_make_table(db, name):
     return db.table(name)
 
@@ -29,7 +30,7 @@ class Database(object):
         resources = [name for name in self._json]
         for name in resources:
             table = tinydb_make_table(self._db, name)
-            tinydb_populate_table(table,self._json[name])
+            tinydb_populate_table(table, self._json[name])
         return resources
 
     @property

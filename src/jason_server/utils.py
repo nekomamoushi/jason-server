@@ -12,6 +12,7 @@ try:
 except ImportError:
     JSONDecodeError = ValueError
 
+
 def open_database(path):
     try:
         with open(path, "r") as f:
