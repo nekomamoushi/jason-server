@@ -171,5 +171,5 @@ def run(options, database):
     global db
     db = Database(database)
     if not quiet:
-        print_message(database, table_names, host, port)
+        print_message(database, db.endpoints, host, port)
     app.run(host=host, port=port, quiet=True)
