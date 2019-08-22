@@ -16,6 +16,7 @@ Get a full fake REST API
   * [Routes](#routes)
      * [Singular routes](#singular-routes)
      * [Pagination](#pagination)
+     * [Sorting](#sorting)
      * [Alternative host (default: localhost)](#alternative-host-default-localhost)
      * [Alternative port (default: 8080)](#alternative-port-default-8080)
 
