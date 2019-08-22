@@ -1,41 +1,21 @@
+import os
+import bottle
 from bottle import Bottle, template, request, response
 from jason_server.database import Database
 from jason_server.utils import chunk_list
 
-# --------------------------------------------------------------------------- #
-
-INDEX_TEMPLATE = """
-<html>
-    <head>
-        <title>Jason Server</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    </head>
-    <body>
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-            <h1>Jason Server</h1>
-            </div>
-        </div>
-        <div class="container">
-            <h2>Resources</h2>
-            <ul>
-                % for table in tables:
-                <li>
-                    <a href="{{base_url}}/{{table}}">{{table}}</a>
-                </li>
-                % end
-            </ul>
-            <h2>HTTP Method supported:</h2>
-            <p><span class="badge badge-secondary">GET</span></p>
-        </div>
-    </body>
-</html>
-"""
 
 # --------------------------------------------------------------------------- #
+
+# Define base directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# App Config
+bottle.TEMPLATE_PATH.insert(0, os.path.join(BASE_DIR, 'views'))
 
 app = Bottle()
 db = None
+
 # --------------------------------------------------------------------------- #
 
 def verify_query_sort(query):
@@ -113,7 +93,7 @@ def bottle_world():
         "base_url": build_url(host, port),
         "tables": db.endpoints
     }
-    return template(INDEX_TEMPLATE, resources)
+    return template('index.html', resources)
 
 
 @app.route('/db')
