@@ -19,7 +19,7 @@ CONTEXT_SETTINGS = dict(help_option_names=['--help'])
     "-q", "--quiet", is_flag=True
 )
 @click.version_option(
-    version='0.4.0'
+    version='0.5.0'
 )
 @click.pass_context
 def cli(ctx, host, port, quiet):
