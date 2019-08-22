@@ -1,9 +1,5 @@
 from bottle import Bottle, template, request, response
-from jason_server.database import (
-    get_table,
-    generate_endpoints,
-    get_tiny_table_names
-)
+from jason_server.database import Database
 from jason_server.utils import chunk_list
 
 # --------------------------------------------------------------------------- #
@@ -39,7 +35,7 @@ INDEX_TEMPLATE = """
 # --------------------------------------------------------------------------- #
 
 app = Bottle()
-
+db = None
 # --------------------------------------------------------------------------- #
 
 def verify_query_sort(query):
@@ -113,24 +109,22 @@ def bottle_world():
 
     host = app.config.get('host')
     port = app.config.get('port')
-    tables = get_tiny_table_names()
     resources = {
         "base_url": build_url(host, port),
-        "tables": tables
+        "tables": db.endpoints
     }
     return template(INDEX_TEMPLATE, resources)
 
 
 @app.route('/<endpoint>', method='GET')
 def get(endpoint):
-    table = get_table(endpoint)
-    data = dict(data=table.all())
-    data = data['data']
+    table = db.resource(endpoint)
+    elements = table.all()
 
     if not request.query:
-        return dict(data=data)
+        return dict(data=elements)
 
-    results = data
+    results = elements
 
     sort, order = verify_query_sort(request.query)
     if sort:
@@ -174,7 +168,8 @@ def run(options, database):
 
     app.config.setdefault('host', host)
     app.config.setdefault('port', port)
-    table_names = generate_endpoints(database)
+    global db
+    db = Database(database)
     if not quiet:
         print_message(database, table_names, host, port)
     app.run(host=host, port=port, quiet=True)
