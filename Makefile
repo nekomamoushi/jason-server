@@ -54,6 +54,7 @@ clean-build:
 clean-test:
 	@rm -rf .pytest_cache
 	@rm -rf .tox/
+	@rm -rf .coverage
 	@rm -rf htmlcov
 
 # --------------------------------------------------------------------------- #
