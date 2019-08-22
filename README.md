@@ -15,6 +15,7 @@ Get a full fake REST API
   - [Getting started](#getting-started)
   - [Routes](#routes)
     - [Singular routes](#singular-routes)
+    - [Filter](#filter)
     - [Pagination](#pagination)
     - [Sorting](#sorting)
     - [Database](#database)
@@ -66,6 +67,12 @@ Now if you go to [http://localhost:8080/articles](http://localhost:8080/articles
 
 ```
 GET /authors
+```
+
+### Filter
+
+```
+GET /articles?title=title&author=eminem
 ```
 
 ### Pagination
