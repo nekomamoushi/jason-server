@@ -116,6 +116,11 @@ def bottle_world():
     return template(INDEX_TEMPLATE, resources)
 
 
+@app.route('/db')
+def db():
+    return db.json
+
+
 @app.route('/<endpoint>', method='GET')
 def get(endpoint):
     table = db.resource(endpoint)

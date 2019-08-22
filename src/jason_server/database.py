@@ -33,6 +33,10 @@ class Database(object):
         return resources
 
     @property
+    def json(self):
+        return self._json
+
+    @property
     def endpoints(self):
         return self._endpoints
 
