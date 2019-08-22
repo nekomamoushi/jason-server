@@ -88,3 +88,29 @@ def describe_endpoint():
         data = r.json()
         assert 30 == data['data'][0]['age']
         assert "Anastasia Coffey" == data['data'][0]['name']
+
+    def get_with_sorting_and_pagination(s):
+        persons_url_sort_age_paginate = "http://127.0.0.1:8100/persons?_sort=age&_page=1"
+        persons_url_sort_name_paginate = "http://127.0.0.1:8100/persons?_sort=name&_page=2"
+        persons_url_sort_desc_age_paginate = "http://127.0.0.1:8100/persons?_sort=age&_order=desc&_page=1"
+        persons_url_sort_name_paginate_with_limit = "http://127.0.0.1:8100/persons?_sort=name&_page=2&_limit=4"
+
+        r = s.get(persons_url_sort_age_paginate)
+        assert 200 == r.status_code
+        data = r.json()
+        assert 23 ==data['data'][1]['age']
+
+        r = s.get(persons_url_sort_name_paginate)
+        assert 200 == r.status_code
+        data = r.json()
+        assert 36 ==data['data'][1]['age']
+
+        r = s.get(persons_url_sort_desc_age_paginate)
+        assert 200 == r.status_code
+        data = r.json()
+        assert 37 ==data['data'][1]['age']
+
+        r = s.get(persons_url_sort_name_paginate_with_limit)
+        assert 200 == r.status_code
+        data = r.json()
+        assert 23 ==data['data'][0]['age']

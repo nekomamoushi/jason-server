@@ -138,7 +138,7 @@ def get(endpoint):
 
     page, limit = verify_query_paginate(request.query)
     if page:
-        chunk_data = list(chunk_list(data, limit))
+        chunk_data = list(chunk_list(results, limit))
         results = chunk_data[page-1]
         link_header = build_link_header(request, page, len(chunk_data))
         response.set_header("Link", link_header)
@@ -174,4 +174,4 @@ def run(options, database):
     table_names = generate_endpoints(database)
     if not quiet:
         print_message(database, table_names, host, port)
-    app.run(host=host, port=port, quiet=True, reloader=True)
+    app.run(host=host, port=port, quiet=True)
