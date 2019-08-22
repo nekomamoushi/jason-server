@@ -11,14 +11,17 @@ Get a full fake REST API
 
 <!-- toc -->
 
-* [Jason Server](#jason-server)
-  * [Getting started](#getting-started)
-  * [Routes](#routes)
-     * [Singular routes](#singular-routes)
-     * [Pagination](#pagination)
-     * [Sorting](#sorting)
-     * [Alternative host (default: localhost)](#alternative-host-default-localhost)
-     * [Alternative port (default: 8080)](#alternative-port-default-8080)
+- [Jason Server](#jason-server)
+  - [Getting started](#getting-started)
+  - [Routes](#routes)
+    - [Singular routes](#singular-routes)
+    - [Pagination](#pagination)
+    - [Sorting](#sorting)
+    - [Database](#database)
+  - [Extras](#extras)
+    - [Alternative Host](#alternative-host)
+    - [Alternative Port](#alternative-port)
+    - [CLI Usage](#cli-usage)
 
 <!-- tocstop -->
 
@@ -83,10 +86,17 @@ Use `_sort` and `_order` (defaults order: asccendant)
 ```
 GET /persons?_sort=age
 GET /persons?_sort=name&_order=desc
-
 ```
 
-### Alternative host (default: localhost)
+### Database
+
+```
+GET /db
+```
+
+## Extras
+
+### Alternative Host
 
 You can start JSON Server on other host with the `--host` flag:
 
@@ -94,13 +104,33 @@ You can start JSON Server on other host with the `--host` flag:
 $ json-server --host "0.0.0.0" watch db.json
 ```
 
-### Alternative port (default: 8080)
+Default: `localhost`
+
+### Alternative Port
 
 You can start JSON Server on other ports with the `--port` flag:
 
 ```bash
 $ json-server --port 8100 watch db.json
 ```
+
+Default: `8080`
+
+### CLI Usage
+
+```bash
+Usage: jason-server [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  -h, --host TEXT     Host adress
+  -p, --port INTEGER  Port
+  -q, --quiet
+  --version           Show the version and exit.
+  --help              Show this message and exit.
+
+Commands:
+  watch  Run your database as REST Api
+  ```
 
 
 
