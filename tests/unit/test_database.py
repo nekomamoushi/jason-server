@@ -13,8 +13,6 @@ def describe_database():
         assert 2 == len(db.endpoints)
         assert 'articles' in db.endpoints
         assert 'authors' in db.endpoints
-
         assert 2 == len(db.resources())
-
         assert 2 == len(db.resource('articles'))
         assert 3 == len(db.resource('authors'))

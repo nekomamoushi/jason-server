@@ -1,8 +1,12 @@
 import os
+from functools import reduce
+
 import bottle
 from bottle import Bottle, template, request, response
+from tinydb import where
+
 from jason_server.database import Database
-from jason_server.utils import chunk_list
+from jason_server.utils import chunk_list, str_to_int
 
 # --------------------------------------------------------------------------- #
 
@@ -60,17 +64,18 @@ def build_link_header(request, page, total):
     return ",".join(links)
 
 
-def query_filter(resources, arguments):
-    user_arguments = [arg for arg in arguments if not arg.startswith('_')]
+def query_filter(table, arguments):
+    user_arguments = [
+        (k, v)
+        for k, v in arguments.items()
+        if not k.startswith('_')
+    ]
     if not user_arguments:
-        return resources
+        return table.all()
 
-    for arg in user_arguments:
-        resources = [
-            r
-            for r in resources
-            if arg in r.keys() and request.query[arg] == str(r[arg])
-        ]
+    query = [where(k) == str_to_int(v) for k, v in user_arguments]
+
+    resources = table.search(reduce(lambda a, b: a & b, query))
 
     return resources
 
@@ -103,16 +108,16 @@ def query_paginate(resources, arguments):
 def retrieve_resources(endpoint, arguments=None):
 
     table = db.resource(endpoint)
-    resources = table.all()
 
     if not arguments:
-        return dict(data=resources)
+        return dict(data=table.all())
 
-    results = query_filter(resources, request.query)
+    results = query_filter(table, request.query)
     results = query_sort(results, request.query)
     results = query_paginate(results, request.query)
 
     return dict(data=results)
+
 
 def retrieve_resource(endpoint, index):
     table = db.resource(endpoint)
