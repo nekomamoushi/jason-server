@@ -23,6 +23,14 @@ CONTEXT_SETTINGS = dict(help_option_names=['--help'])
 )
 @click.pass_context
 def cli(ctx, host, port, quiet):
+    """Set options
+
+    Args:
+        host(str): host adress
+        port(int): port number
+        quiet(bool): disable cli output
+
+    """
     ctx.obj = {}
     ctx.obj["host"] = host
     ctx.obj["port"] = port
@@ -36,6 +44,13 @@ def cli(ctx, host, port, quiet):
 )
 @click.pass_context
 def watch(ctx, database, open):
+    """Generate the REST api and Run the server
+
+    Args:
+        databae(str): path to database
+        open(bool): open home url in browser
+
+    """
     if open:
         url = "http://{}:{}".format(ctx.obj["host"], ctx.obj["port"])
         webbrowser.open(url)
