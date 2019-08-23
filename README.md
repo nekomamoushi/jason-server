@@ -14,7 +14,8 @@ Get a full fake REST API
 - [Jason Server](#jason-server)
   - [Getting started](#getting-started)
   - [Routes](#routes)
-    - [Singular routes](#singular-routes)
+    - [Singular Routes](#singular-routes)
+    - [Plural Routes](#plural-routes)
     - [Filter](#filter)
     - [Pagination](#pagination)
     - [Sorting](#sorting)
@@ -63,10 +64,17 @@ Now if you go to [http://localhost:8080/articles](http://localhost:8080/articles
 
 ## Routes
 
-### Singular routes
+### Singular Routes
 
 ```
 GET /authors
+```
+
+#### Plural Routes
+
+```
+GET /authors
+GET /authors/1
 ```
 
 ### Filter
@@ -137,7 +145,14 @@ Options:
 
 Commands:
   watch  Run your database as REST Api
-  ```
+```
 
+## Credits
 
+- [json-server](https://github.com/typicode/json-server)
+- [sandman](https://github.com/jeffknupp/sandman)
+
+## License
+
+The code is available under the [MIT](LICENSE) license.
 
