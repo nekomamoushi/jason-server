@@ -28,3 +28,10 @@ def open_database(path):
 def chunk_list(data, chunk_size=1):
     it = iter(data)
     return iter(lambda: tuple(islice(it, chunk_size)), ())
+
+
+def str_to_int(value):
+    try:
+        return int(value)
+    except ValueError:
+        return value
