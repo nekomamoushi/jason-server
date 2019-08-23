@@ -8,18 +8,19 @@ TWINE:=twine
 
 help:
 	@echo "Please use 'make <target>' with available <target>"
-	@echo "  init           to install all your dev dependencies"
-	@echo "  venv           to create the venc with pipenv"
-	@echo "  install        to install your dependencies"
-	@echo "  install-dev    to install also your dev-dependencies"
-	@echo "  editable       to make your package installable and testable"
-	@echo "  cleany         to clean them all"
-	@echo "  build-sdist    to build a distribution"
-	@echo "  build-wheel    to build a wheel (see setup.cfg for universal wheel)"
-	@echo "  tasty          to launch pytest"
-	@echo "  coverage       to coverage your code"
-	@echo "  upload-pypi    to upload your package to testpypi.org"
-	@echo "  upload-test    to upload your package to pypi.org"
+	@echo "  init             to install all your dev dependencies"
+	@echo "  venv             to create the venc with pipenv"
+	@echo "  install          to install your dependencies"
+	@echo "    install-dev    to install also your dev-dependencies"
+	@echo "    editable       to make your package installable and testable"
+	@echo "  clean            to clean them all"
+	@echo "  build            to build sdist and wheel"
+	@echo "    build-sdist    to build a source distribution"
+	@echo "    build-wheel    to build a wheel (see setup.cfg for universal wheel)"
+	@echo "  tests            to launch tests with pytest"
+	@echo "  coverage         to coverage your code"
+	@echo "  upload-pypi      to upload your package to testpypi.org"
+	@echo "  upload-test      to upload your package to pypi.org"
 
 # --------------------------------------------------------------------------- #
 # Init Environment
@@ -77,12 +78,12 @@ build-wheel:
 # --------------------------------------------------------------------------- #
 
 # Make sure pytest is installed
-tasty: editable
-	$(PYTEST) -s
+tests: editable
+	@bash run_tests.sh
 
 # Code Coverage (make sur pytest-cov is installed)
 coverage:
-	$(PIPENV) run py.test --cov=$(PACKAGE_NAME) tests
+	$(PYTEST) --cov=$(PACKAGE_NAME) tests/unit
 
 # --------------------------------------------------------------------------- #
 # Upload Environment
@@ -90,7 +91,7 @@ coverage:
 
 # Make sure twine is installed
 upload-pypi:
-	twine upload --repository pypi dist/*
+	$(TWINE) upload --repository pypi dist/*
 
 upload-test:
-	twine upload --repository testpypi dist/*
+	$(TWINE) upload --repository testpypi dist/*
