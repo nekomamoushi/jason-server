@@ -187,6 +187,13 @@ def print_message(database, tables, host, port):
     print("    {}/".format(base_url))
 
 
+def create_database(path, host='localhost', port=8080):
+    app.config.setdefault('host', host)
+    app.config.setdefault('port', port)
+    global db
+    db = Database(path)
+
+
 def run(options, database):
     host = options['host']
     port = options['port']

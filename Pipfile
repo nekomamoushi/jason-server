@@ -6,10 +6,10 @@ name = "pypi"
 [dev-packages]
 pytest = "*"
 pytest-describe = "*"
-jason-server = {editable = true,path = "."}
 flake8 = "*"
 pytest-cov = "*"
 requests = "*"
+webtest = "*"
 
 [packages]
 click = "*"
