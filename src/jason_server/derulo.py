@@ -23,6 +23,17 @@ db = None
 
 
 def build_link_header(request, page, total):
+    """Return Link Header in case of pagination
+
+    Args:
+        request(Request): incoming request
+        page(int): requested page
+        total(int): total number of page
+
+    Returns:
+        str: Link Header
+
+    """
 
     REL_FIRST = '<{url}?_page={first}>; rel="first"'
     REL_PREV = '<{url}?_page={prev}>; rel="prev"'
@@ -65,6 +76,16 @@ def build_link_header(request, page, total):
 
 
 def query_filter(table, arguments):
+    """Return the requested resource and apply filter
+
+    Args:
+        table(Table): resource
+        arguments(FormsDict): query arguments
+
+    Returns:
+        list: Filtered resource
+    """
+
     user_arguments = [
         (k, v)
         for k, v in arguments.items()
@@ -81,6 +102,16 @@ def query_filter(table, arguments):
 
 
 def query_sort(resources, arguments):
+    """Return the resources sorted
+
+    Args:
+        resources(list): List to sort
+        arguments(FormsDict): query arguments
+
+    Returns:
+        list: Sorted resource (asc or desc)
+    """
+
     if '_sort' not in arguments:
         return resources
 
@@ -93,6 +124,16 @@ def query_sort(resources, arguments):
 
 
 def query_paginate(resources, arguments):
+    """Return the resources paginated
+
+    Args:
+        resources(list): List to paginate
+        arguments(FormsDict): query arguments
+
+    Returns:
+        list: Paginated resource (asc or desc)
+    """
+
     if '_page' not in arguments:
         return resources
 
@@ -106,7 +147,16 @@ def query_paginate(resources, arguments):
 
 
 def retrieve_resources(endpoint, arguments=None):
+    """Return JSON repr for the corresponding endpoint
 
+    Args:
+        endpoint(str): Endpoint name
+        arguments(FormsDict): query arguments
+
+    Returns:
+        dict: JSON resource
+
+    """
     table = db.resource(endpoint)
 
     if not arguments:
@@ -120,6 +170,15 @@ def retrieve_resources(endpoint, arguments=None):
 
 
 def retrieve_resource(endpoint, index):
+    """Return JSON repr for the corresponding endpoint
+
+    Args:
+        endpoint(str): Endpoint name
+
+    Returns:
+        dict: JSON resource
+
+    """
     table = db.resource(endpoint)
     elements = table.all()
     index = int(index) - 1
@@ -134,11 +193,13 @@ def retrieve_resource(endpoint, index):
 
 @app.hook('after_request')
 def set_default_headers():
+    """Set Default Headers"""
     response.set_header("X-Powerded-By", "Bottle")
 
 
 @app.route('/')
 def bottle_world():
+    """Return information about endpoints url"""
 
     def build_url(host, port):
         return "http://{}:{}".format(host, port)
@@ -154,17 +215,32 @@ def bottle_world():
 
 @app.route('/db')
 def db():
+    """Return the full database """
     return db.json
 
 
 @app.route('/<endpoint>', method='GET')
 def get_resources(endpoint):
+    """Return the resources for the corresponding *endpoint*,
+    Can be filtered, sorted or paginated
+
+    Args:
+        endpoint(str): Endpoint name
+
+    """
     results = retrieve_resources(endpoint, request.query)
     return results
 
 
 @app.route('/<endpoint>/<index>', method='GET')
 def get_resource(endpoint, index):
+    """Return the resource in *endpoint*, corresponding to the *key*
+
+    Args:
+        endpoint(str): Endpoint name
+        index(int): Index number
+
+    """
     resource = retrieve_resource(endpoint, index)
     return resource
 
@@ -188,6 +264,7 @@ def print_message(database, tables, host, port):
 
 
 def create_database(path, host='localhost', port=8080):
+    """For Tests purpose"""
     app.config.setdefault('host', host)
     app.config.setdefault('port', port)
     global db
@@ -195,6 +272,8 @@ def create_database(path, host='localhost', port=8080):
 
 
 def run(options, database):
+    """Main entry point"""
+
     host = options['host']
     port = options['port']
     quiet = options['quiet']
