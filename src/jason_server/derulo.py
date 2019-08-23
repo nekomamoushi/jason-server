@@ -18,30 +18,6 @@ db = None
 # --------------------------------------------------------------------------- #
 
 
-def verify_query_filter(query):
-    return [q for q in query if not q.startswith('_')]
-
-
-def verify_query_sort(query):
-    sort, order = (None, "asc")
-    if query and '_sort' in query:
-        sort = query['_sort']
-        if '_order' in query:
-            order = query['_order']
-    return sort, order
-
-
-def verify_query_paginate(query):
-    page, limit = (None, 10)
-    if query and '_page' in query:
-        page = int(query['_page'])
-        if '_limit' in query:
-            limit = int(query['_limit'])
-            limit = limit if limit < 10 else 10
-
-    return page, limit
-
-
 def build_link_header(request, page, total):
 
     REL_FIRST = '<{url}?_page={first}>; rel="first"'
@@ -84,6 +60,71 @@ def build_link_header(request, page, total):
     return ",".join(links)
 
 
+def query_filter(resources, arguments):
+    user_arguments = [arg for arg in arguments if not arg.startswith('_')]
+    if not user_arguments:
+        return resources
+
+    for arg in user_arguments:
+        resources = [
+            r
+            for r in resources
+            if arg in r.keys() and request.query[arg] == str(r[arg])
+        ]
+
+    return resources
+
+
+def query_sort(resources, arguments):
+    if '_sort' not in arguments:
+        return resources
+
+    sort = arguments['_sort']
+    order = 'asc' if '_order' not in arguments else arguments['_order']
+    if order == 'asc':
+        return sorted(resources, key=lambda i: i[sort])
+
+    return sorted(resources, key=lambda i: i[sort], reverse=True)
+
+
+def query_paginate(resources, arguments):
+    if '_page' not in arguments:
+        return resources
+
+    page = int(arguments['_page'])
+    limit = 10 if '_limit' not in arguments else int(arguments['_limit'])
+    chunk_data = list(chunk_list(resources, limit))
+    results = chunk_data[page-1]
+    link_header = build_link_header(request, page, len(chunk_data))
+    response.set_header("Link", link_header)
+    return results
+
+
+def retrieve_resources(endpoint, arguments=None):
+
+    table = db.resource(endpoint)
+    resources = table.all()
+
+    if not arguments:
+        return dict(data=resources)
+
+    results = query_filter(resources, request.query)
+    results = query_sort(results, request.query)
+    results = query_paginate(results, request.query)
+
+    return dict(data=results)
+
+def retrieve_resource(endpoint, index):
+    table = db.resource(endpoint)
+    elements = table.all()
+    index = int(index) - 1
+
+    if index >= len(elements):
+        return {}
+
+    return elements[index]
+
+
 # --------------------------------------------------------------------------- #
 
 @app.hook('after_request')
@@ -111,52 +152,16 @@ def db():
     return db.json
 
 
-@app.route('/<endpoint>/<index>', method='GET')
-def get(endpoint, index):
-    table = db.resource(endpoint)
-    elements = table.all()
-    index = int(index) - 1
-
-    if index >= len(elements):
-        return {}
-
-    return elements[index]
-
-
 @app.route('/<endpoint>', method='GET')
-def get(endpoint):
-    table = db.resource(endpoint)
-    elements = table.all()
-    print(type(elements))
-    if not request.query:
-        return dict(data=elements)
+def get_resources(endpoint):
+    results = retrieve_resources(endpoint, request.query)
+    return results
 
-    results = elements
 
-    user_args = verify_query_filter(request.query)
-    if user_args:
-        for arg in user_args:
-            results = [
-                r
-                for r in results
-                if arg in r.keys() and request.query[arg] == str(r[arg])
-            ]
-
-    sort, order = verify_query_sort(request.query)
-    if sort:
-        if order == 'asc':
-            results = sorted(results, key=lambda i: i[sort])
-        else:
-            results = sorted(results, key=lambda i: i[sort], reverse=True)
-
-    page, limit = verify_query_paginate(request.query)
-    if page:
-        chunk_data = list(chunk_list(results, limit))
-        results = chunk_data[page-1]
-        link_header = build_link_header(request, page, len(chunk_data))
-        response.set_header("Link", link_header)
-
-    return dict(data=results)
+@app.route('/<endpoint>/<index>', method='GET')
+def get_resource(endpoint, index):
+    resource = retrieve_resource(endpoint, index)
+    return resource
 
 # --------------------------------------------------------------------------- #
 
