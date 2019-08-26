@@ -1,5 +1,4 @@
 
-import pytest
 from webtest import TestApp
 
 from jason_server.derulo import app, create_database

@@ -1,5 +1,5 @@
 
-from tinydb import TinyDB, Query
+from tinydb import TinyDB
 from tinydb.storages import MemoryStorage
 
 from jason_server.utils import open_database
