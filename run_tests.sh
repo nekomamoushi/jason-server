@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+
 # kill the current script and all the background processes.
 trap "kill 0" EXIT
 
